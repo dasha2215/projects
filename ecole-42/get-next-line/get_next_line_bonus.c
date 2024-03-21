@@ -48,7 +48,7 @@ static char	*set_line(char *next_line)
 char	*get_next_line(int fd)
 {
 	char		*next_line;
-	static char	*prev_line;
+	static char	*prev_line[OPEN_MAX];
 	char		*buffer;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -56,15 +56,15 @@ char	*get_next_line(int fd)
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (0);
-	next_line = read_line(fd, prev_line, buffer);
+	next_line = read_line(fd, prev_line[fd], buffer);
 	free(buffer);
 	if (!next_line)
 	{
-		free(prev_line);
-		prev_line = NULL;
+		free(prev_line[fd]);
+		prev_line[fd] = NULL;
 		return (0);
 	}
-	prev_line = set_line(next_line);
+	prev_line[fd] = set_line(next_line);
 	if (*next_line == '\0')
 	{
 		free(next_line);
