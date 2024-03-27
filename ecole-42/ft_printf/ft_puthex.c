@@ -16,6 +16,17 @@ static int	hexlen(unsigned long n)
 	return (len);
 }
 
+static void	upper_hex(char *str, int len, char format)
+{
+	if (format == 'x')
+		return ;
+	while (str[len])
+	{
+		str[len] = ft_toupper(str[len]);
+		len++;
+	}
+}
+
 int	ft_puthex(unsigned long n, char format)
 {
 	char	*str;
@@ -39,11 +50,7 @@ int	ft_puthex(unsigned long n, char format)
 		else
 			str[len] = (remainder - 10) + 'a';
 	}
-	while (format == 'X' && str[len])
-	{
-		str[len] = ft_toupper(str[len]);
-		len++;
-	}
+	upper_hex(str, len, format);
 	len = ft_putstr(str);
 	free(str);
 	return (len);
